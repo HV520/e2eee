@@ -1299,4 +1299,4 @@ else:
                 time.sleep(1)
                 st.rerun()
 
-st.markdown('<div class="footer">Made with ❤️ by HASSAN RAJPUT | © 2025 All Rights Reserved</div>', unsafe_allow_html=True)
+st.markdown('<div class="footer">Made with ❤️ by AYAZ 520 | © 2025 All Rights Reserved</div>', unsafe_allow_html=True)
